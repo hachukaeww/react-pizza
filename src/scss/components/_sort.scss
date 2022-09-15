@@ -7,6 +7,9 @@
 
     svg {
       margin-right: 8px;
+      &.active{
+        transform: rotate(180deg);
+      }
     }
 
     b {
@@ -40,6 +43,7 @@
         &.active,
         &:hover {
           background: rgba(254, 95, 30, 0.05);
+         
         }
 
         &.active {
