@@ -12,13 +12,13 @@ function Home() {
     name: "популярности",
     sort: "rating",
   });
-  
 
   React.useEffect(() => {
     setIsLoading(true);
     fetch(
-      "https://6322c84ca624bced307e6cf0.mockapi.io/Pizzas?category=" +
-        activeIndex
+      `https://6322c84ca624bced307e6cf0.mockapi.io/Pizzas?${
+        activeIndex > 0 ? `category=${activeIndex}` : ""
+      }&sortBy=${activeSort.sort}&order=desc`
     )
       .then((res) => res.json())
       .then((arr) => {
@@ -34,7 +34,7 @@ function Home() {
           value={activeIndex}
           onClickCategory={(id) => setActiveIndex(id)}
         />
-         <Sort value={activeSort} onClickSort={(id) => setActiveSort(id)} />
+        <Sort value={activeSort} onClickSort={(id) => setActiveSort(id)} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
