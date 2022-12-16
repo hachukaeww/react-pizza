@@ -4,9 +4,10 @@ import Home from "./Pages/Home";
 import { Routes,Route } from "react-router-dom";
 import NotFound from "./Pages/NotFound";
 import Cart from "./Pages/Cart";
-import React from "react";
+import React, { useContext } from "react";
 
 
+export const SearchContext=React.createContext("");
 
 
 function App() {
@@ -14,19 +15,22 @@ function App() {
 
 
   return (
+    <SearchContext.Provider value={{SearchValue,setSearchValue}}>
     <div className="wrapper">
-      <Header SearchValue={SearchValue} setSearchValue={setSearchValue}/>
+      <Header/>
       <div className="content">
         <div className="container">
         <Routes>
-         <Route path="/" element = { <Home SearchValue={SearchValue}/>} /> 
+         <Route path="/" element = { <Home />} /> 
          <Route path="/Cart" element = { <Cart/>} />
          <Route path="*" element = { <NotFound/>} />
           </Routes>
+        
       
         </div>
       </div>
     </div>
+    </SearchContext.Provider>
   );
 }
 
