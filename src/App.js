@@ -4,7 +4,8 @@ import Home from "./Pages/Home";
 import { Routes,Route } from "react-router-dom";
 import NotFound from "./Pages/NotFound";
 import Cart from "./Pages/Cart";
-import React, { useContext } from "react";
+import { useContext } from "react";
+import React from "react";
 
 
 export const SearchContext=React.createContext("");

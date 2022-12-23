@@ -7,7 +7,7 @@ import Pagination from "../Components/Pagination/Pagination";
 import { SearchContext } from "../App";
 import { setCategoryId } from "../redux/slice/filterSlice";
 import { useSelector,useDispatch } from "react-redux";
-import {setActiveSort} from "../redux/slice/filterSlice";
+import axios from "axios";
 
 
 
@@ -20,23 +20,17 @@ function Home() {
   const {SearchValue,setSearchValue}=React.useContext(SearchContext)
   const [PizzaItems, setPizzaItems] = React.useState([]);
   const [IsLoading, setIsLoading] = React.useState(true);
-  // const [activeIndex, setActiveIndex] = React.useState(0);
-  // const [activeSort, setActiveSort] = React.useState({
-  //   name: "популярности",
-  //   sort: "rating",
-  // });
   React.useEffect(() => {
     setIsLoading(true);
-    fetch(
-      `https://6322c84ca624bced307e6cf0.mockapi.io/Pizzas?${
-        categoryId > 0 ? `category=${categoryId}` : ""
-      }&sortBy=${activeSort.sort}&order=desc${search}`
-    )
-      .then((res) => res.json())
-      .then((arr) => {
-        setPizzaItems(arr);
+ 
+    axios.get(
+        `https://6322c84ca624bced307e6cf0.mockapi.io/Pizzas?${
+          categoryId > 0 ? `category=${categoryId}` : ""
+        }&sortBy=${activeSort.sort}&order=desc${search}`
+      ).then((res)=>{
+        setPizzaItems(res.data);
         setIsLoading(false);
-      });
+      })
     window.scrollTo(0, 0);
   }, [categoryId, activeSort,SearchValue]);
   const search = SearchValue ?`&search=${SearchValue}`:"";

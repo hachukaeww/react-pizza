@@ -3,7 +3,9 @@ import { useSelector,useDispatch } from "react-redux";
 import {setActiveSort} from "../redux/slice/filterSlice";
 
 function Sort() {
+  const[Value,setValue]=React.useState("");
   const dispatch=useDispatch();
+  const sortRef=React.useRef("");
   const sort=useSelector(state=>state.filter.sort)
   const [open, setOpen] = React.useState(false);
   const sortList = [
@@ -16,8 +18,24 @@ function Sort() {
     dispatch(setActiveSort(obj))
     setOpen(false);
   };
+  React.useEffect(()=>{
+const handleClickOutSide=(event)=>{
+   if(!event.path.includes(sortRef.current)){
+  setOpen(false);
+ }
+}
+document.body.addEventListener('click',handleClickOutSide)
+
+   return()=>{
+    document.body.removeEventListener('click',handleClickOutSide);
+   
+   }
+ 
+
+    
+},[])
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           className={open ? "active" : ""}
@@ -51,6 +69,7 @@ function Sort() {
           </ul>
         </div>
       )}
+     
     </div>
   );
 }
