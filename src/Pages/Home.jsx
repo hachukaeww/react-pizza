@@ -3,11 +3,12 @@ import Categories from "../Components/Categories";
 import Sort from "../Components/Sort";
 import { Skeleton } from "../Components/PizzaBlock/Skeleton";
 import Pizzablock from "../Components/PizzaBlock/Pizzablock";
-import Pagination from "../Components/Pagination/Pagination";
 import { SearchContext } from "../App";
 import { setCategoryId } from "../redux/slice/filterSlice";
 import { useSelector,useDispatch } from "react-redux";
 import axios from "axios";
+import PaginationReact from "../Components/Pagination/Pagination";
+
 
 
 
@@ -20,19 +21,22 @@ function Home() {
   const {SearchValue,setSearchValue}=React.useContext(SearchContext)
   const [PizzaItems, setPizzaItems] = React.useState([]);
   const [IsLoading, setIsLoading] = React.useState(true);
-  React.useEffect(() => {
+  const [CurrentPage, setCurrentPage] = React.useState(1);
+  console.log(CurrentPage)
+
+  React.useEffect (() => {
     setIsLoading(true);
  
     axios.get(
         `https://6322c84ca624bced307e6cf0.mockapi.io/Pizzas?${
           categoryId > 0 ? `category=${categoryId}` : ""
-        }&sortBy=${activeSort.sort}&order=desc${search}`
+        }page=${CurrentPage}&limit=4&sortBy=${activeSort.sort}&order=desc${search}`
       ).then((res)=>{
         setPizzaItems(res.data);
         setIsLoading(false);
       })
     window.scrollTo(0, 0);
-  }, [categoryId, activeSort,SearchValue]);
+  }, [categoryId, activeSort,SearchValue,CurrentPage]);
   const search = SearchValue ?`&search=${SearchValue}`:"";
   const pizzas=PizzaItems.map((items, index) => (
     <Pizzablock key={index} {...items} />
@@ -56,8 +60,11 @@ function Home() {
           ?skeletons
           :pizzas}
       </div>
+      <PaginationReact onChangePage={(number)=>setCurrentPage(number)}/>
+  </>
      
-    </>
+     
+   
   );
 }
 
