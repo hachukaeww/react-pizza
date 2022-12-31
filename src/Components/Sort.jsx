@@ -1,39 +1,36 @@
 import React from "react";
-import { useSelector,useDispatch } from "react-redux";
-import {setActiveSort} from "../redux/slice/filterSlice";
-
+import { useSelector, useDispatch } from "react-redux";
+import { setActiveSort } from "../redux/slice/filterSlice";
+export const sortList = [
+  { name: "популярности", sortProperty: "rating" },
+  { name: "цене", sortProperty: "price" },
+  { name: "алфавиту", sortProperty: "title" },
+];
 function Sort() {
-  const[Value,setValue]=React.useState("");
-  const dispatch=useDispatch();
-  const sortRef=React.useRef("");
-  const sort=useSelector(state=>state.filter.sort)
+  const dispatch = useDispatch();
+  const sortRef = React.useRef("");
+  const activeSort = useSelector(state=>state.filter.sort)
   const [open, setOpen] = React.useState(false);
-  const sortList = [
-    { name: "популярности", sort: "rating" },
-    { name: "цене", sort: "price" },
-    { name: "алфавиту", sort: "title" },
-  ];
- 
+
+
+
   const onClickToSort = (obj) => {
-    dispatch(setActiveSort(obj))
+    dispatch(setActiveSort(obj));
+    
     setOpen(false);
   };
-  React.useEffect(()=>{
-const handleClickOutSide=(event)=>{
-   if(!event.path.includes(sortRef.current)){
-  setOpen(false);
- }
-}
-document.body.addEventListener('click',handleClickOutSide)
+  React.useEffect(() => {
+    const handleClickOutSide = (event) => {
+      if (!event.path.includes(sortRef.current)) {
+        setOpen(false);
+      }
+    };
+    document.body.addEventListener("click", handleClickOutSide);
 
-   return()=>{
-    document.body.removeEventListener('click',handleClickOutSide);
-   
-   }
- 
-
-    
-},[])
+    return () => {
+      document.body.removeEventListener("click", handleClickOutSide);
+    };
+  }, []);
   return (
     <div ref={sortRef} className="sort">
       <div className="sort__label">
@@ -51,8 +48,8 @@ document.body.addEventListener('click',handleClickOutSide)
           />
         </svg>
         <b>Сортировка по:</b>
-        
-        <span onClick={() => setOpen(!open)}>{sort.name}</span>
+
+        <span onClick={() => setOpen(!open)}>{activeSort.name}</span>
       </div>
       {open && (
         <div className="sort__popup">
@@ -61,7 +58,9 @@ document.body.addEventListener('click',handleClickOutSide)
               <li
                 onClick={() => onClickToSort(sortItem)}
                 key={index}
-                className={sort.sort === sortItem.sort ? "active" : ""}
+                className={
+                  activeSort.sortProperty === sortItem.sortProperty ? "active" : ""
+                }
               >
                 {sortItem.name}
               </li>
@@ -69,7 +68,6 @@ document.body.addEventListener('click',handleClickOutSide)
           </ul>
         </div>
       )}
-     
     </div>
   );
 }
