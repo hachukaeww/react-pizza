@@ -16,9 +16,11 @@ import qs from "qs";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const activeSort = useSelector((state) => state.filter.sort);
-  const categoryId = useSelector((state) => state.filter.categoryId);
-  const CurrentPage = useSelector((state) => state.filter.currentPage);
+  const { sort, categoryId, currentPage } = useSelector(
+    (state) => state.filter
+  );
+  const IsSearch = React.useRef(false);
+  const IsMounted = React.useRef(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,34 +30,60 @@ function Home() {
   const [IsLoading, setIsLoading] = React.useState(true);
 
   const category = categoryId > 0 ? `category=${categoryId}` : "";
-
-
   React.useEffect(() => {
-    setIsLoading(true);
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1));
+      const sort = sortList.find(
+        (obj) => obj.sortProperty === params.sortProperty
+      );
+
+    
+      dispatch(setFilters({ ...params, sort }));
+      IsSearch.current = true;
+    }
+   
+  }, []);
+  const search = SearchValue ? `&search=${SearchValue}` : "";
+  const fetchPizza=()=>{
+    setIsLoading(true);       
 
     axios
       .get(
-        `https://6322c84ca624bced307e6cf0.mockapi.io/Pizzas?${category}&page=${CurrentPage}&limit=8&sortBy=${activeSort.sortProperty}&order=desc${search}`
+        `https://6322c84ca624bced307e6cf0.mockapi.io/Pizzas?${category}&page=${currentPage}&limit=8&sortBy=${sort.sortProperty}&order=desc${search}`
       )
       .then((res) => {
         setPizzaItems(res.data);
         setIsLoading(false);
       });
-    window.scrollTo(0, 0);
-  }, [categoryId, activeSort, SearchValue, CurrentPage]);
-  React.useEffect(() => {
-    const queryString = qs.stringify({
-      sortProperty: activeSort.sortProperty,
-      categoryId,
-      CurrentPage,
-    });
+  }
 
-    navigate(`?${queryString}`);
-  }, [categoryId, activeSort, CurrentPage]);
+  React.useEffect(() => {
+    if(!IsSearch.current){
+         fetchPizza();
+
+    }
+ IsSearch.current =false;
+   
+    window.scrollTo(0, 0);
+  }, [categoryId, sort.sortProperty, SearchValue, currentPage]);
+
+  React.useEffect(() => {
+    if(IsMounted.current){
+      const queryString = qs.stringify({
+        sortProperty: sort.sortProperty,
+        categoryId,
+        currentPage,
+      });
+  
+      navigate(`?${queryString}`);
+    }
+    IsMounted.current=true;
+ 
+  }, [categoryId, sort.sortProperty, currentPage]);
   const onChangeCurrentPage = (num) => {
     dispatch(setCurrentPage(num));
   };
-  const search = SearchValue ? `&search=${SearchValue}` : "";
+
   const pizzas = PizzaItems.map((items, index) => (
     <Pizzablock key={index} {...items} />
   ));

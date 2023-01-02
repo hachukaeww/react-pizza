@@ -18,15 +18,17 @@ const initialState = {
             state.categoryId=action.payload;
         },
         setActiveSort(state,action){
-            state.sort=action.payload
+            state.sort=action.payload;
         },
         setCurrentPage(state,action){
-          state.currentPage=action.payload
+          state.currentPage=action.payload;
+          console.log(state.currentPage)
        },
           setFilters(state,action){
           state.currentPage = Number(action.payload.currentPage);
           state.categoryId = Number(action.payload.categoryId);
           state.sort = action.payload.sort;
+        
         }
         
         
