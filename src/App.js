@@ -4,7 +4,7 @@ import Home from "./Pages/Home";
 import { Routes,Route } from "react-router-dom";
 import NotFound from "./Pages/NotFound";
 import Cart from "./Pages/Cart";
-import { useContext } from "react";
+import FullPizza from "./Pages/FullPizza";
 import React from "react";
 
 
@@ -23,6 +23,7 @@ function App() {
         <div className="container">
         <Routes>
          <Route path="/" element = { <Home />} /> 
+         <Route path="pizza/:id" element = { <FullPizza />} /> 
          <Route path="/Cart" element = { <Cart/>} />
          <Route path="*" element = { <NotFound/>} />
           </Routes>

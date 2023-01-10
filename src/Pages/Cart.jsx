@@ -19,6 +19,7 @@ if(!totalPrice){
   return <CartEmpty/>
 }
   return (
+
   
     <div className="content">
     
