@@ -3,12 +3,14 @@ import Categories from "../Components/Categories";
 import Sort, { sortList } from "../Components/Sort";
 import { Skeleton } from "../Components/PizzaBlock/Skeleton";
 import Pizzablock from "../Components/PizzaBlock/Pizzablock";
-import { SearchContext } from "../App";
 import {
+  selectFilter,
   setCategoryId,
   setCurrentPage,
   setFilters,
 } from "../redux/slice/filterSlice";
+
+ import {useSelectorPizza} from "../redux/slice/pizzaSlice";
 import { fetchPizzas } from "../redux/slice/pizzaSlice";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -19,10 +21,9 @@ import CartEmpty from "./CartEmpty";
 import NotFoundBlock from "../Components/NotFoundBLock";
 
 function Home() {
-  const { sort, categoryId, currentPage } = useSelector(
-    (state) => state.filter
-  );
-  const  {pizzaItems,status}  = useSelector((state) => state.pizza);
+  const { sort, categoryId, currentPage,SearchValue } = useSelector(selectFilter);
+  const  {pizzaItems,status}  = useSelector(useSelectorPizza);
+  console.log(pizzaItems)
 
 
   const IsSearch = React.useRef(false);
@@ -31,7 +32,7 @@ function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { SearchValue } = React.useContext(SearchContext);
+ 
  
 
   const category = categoryId > 0 ? `category=${categoryId}` : "";
@@ -51,7 +52,7 @@ function Home() {
   const search = SearchValue ? `&search=${SearchValue}` : "";
 
   const fetchPizza = async () => {
-   
+   //@ts-ignore
     dispatch(fetchPizzas({sort, category, currentPage,search}));
   }
 
@@ -77,15 +78,15 @@ function Home() {
     IsMounted.current = true;
   }, [categoryId, sort.sortProperty, currentPage]);
 
-  const onChangeCurrentPage = (num) => {
+  const onChangeCurrentPage = (num:number) => {
     dispatch(setCurrentPage(num));
   };
-
-  const pizzas = pizzaItems.map((items, index) => (
+  //@ts-ignore
+  const pizzas = pizzaItems.map((items, index:number) => (
      <Pizzablock key={index}  {...items} />
   
   ));
-  const OnChangeCategoryId = (id) => {
+  const OnChangeCategoryId = (id:number) => {
     dispatch(setCategoryId(id));
   };
   const skeletons = [...new Array(8)].map((_, index) => (

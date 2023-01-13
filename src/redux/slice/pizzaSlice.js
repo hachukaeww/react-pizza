@@ -54,5 +54,5 @@ const pizzaSllice =createSlice({
       },
 });
 
-export const {}=pizzaSllice.actions;
+export const useSelectorPizza = state=>state.pizza;
 export default pizzaSllice.reducer;

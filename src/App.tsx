@@ -6,17 +6,12 @@ import NotFound from "./Pages/NotFound";
 import Cart from "./Pages/Cart";
 import FullPizza from "./Pages/FullPizza";
 import React from "react";
-
-
-export const SearchContext=React.createContext("");
-
-
 function App() {
-  const [SearchValue,setSearchValue]=React.useState("");
+
 
 
   return (
-    <SearchContext.Provider value={{SearchValue,setSearchValue}}>
+  
     <div className="wrapper">
       <Header/>
       <div className="content">
@@ -32,7 +27,7 @@ function App() {
         </div>
       </div>
     </div>
-    </SearchContext.Provider>
+   
   );
 }
 

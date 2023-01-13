@@ -1,25 +1,27 @@
 import React from "react";
 import styles from "./Search.module.scss";
-import { SearchContext } from "../../App";
+import {selectFilter, setSearchValue} from "../../redux/slice/filterSlice";
 import debounce from "lodash.debounce";
+import { useDispatch, useSelector } from "react-redux";
 
-function Search() {
-const[Value,setValue]=React.useState("");
-  const { SearchValue, setSearchValue } = React.useContext(SearchContext);
-  const inputRef = React.useRef();
+const Search:React.FC=()=> {
+const[Value,setValue]=React.useState<string>("");
+
+  const dispatch = useDispatch();
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const onClickClear = () => {
-    setSearchValue("");
+    dispatch(setSearchValue(''));
     setValue("");
-    inputRef.current.focus();
+    inputRef.current?.focus();
   };
   const updateSearchValue= React.useCallback(
     debounce((str)=>{
+    dispatch(  setSearchValue(str))
     
-      setSearchValue(str);
     },1000),
     [],
   )
-  const onChangeInput=(event)=>{
+  const onChangeInput=(event:any)=>{
     setValue(event.target.value);
     updateSearchValue(event.target.value); 
   }
@@ -61,7 +63,7 @@ const[Value,setValue]=React.useState("");
       </svg>
       {Value && (
         <svg
-          ref={inputRef}
+          
           onClick={onClickClear}
           className={styles.clear}
           viewBox="0 0 20 20"
@@ -71,6 +73,7 @@ const[Value,setValue]=React.useState("");
         </svg>
       )}
       <input
+      ref={inputRef}
         value={Value}
         onChange={onChangeInput}
         className={styles.input}
