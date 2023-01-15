@@ -10,30 +10,28 @@ import {
   setFilters,
 } from "../redux/slice/filterSlice";
 
- import {useSelectorPizza} from "../redux/slice/pizzaSlice";
+import { useSelectorPizza } from "../redux/slice/pizzaSlice";
 import { fetchPizzas } from "../redux/slice/pizzaSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 import PaginationReact from "../Components/Pagination/Pagination";
 import qs from "qs";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import CartEmpty from "./CartEmpty";
 import NotFoundBlock from "../Components/NotFoundBLock";
+import { useAppDispatch } from "../redux/store";
 
 function Home() {
-  const { sort, categoryId, currentPage,SearchValue } = useSelector(selectFilter);
-  const  {pizzaItems,status}  = useSelector(useSelectorPizza);
-  console.log(pizzaItems)
-
+  const { sort, categoryId, currentPage, SearchValue } =
+    useSelector(selectFilter);
+  const { pizzaItems, status } = useSelector(useSelectorPizza);
+  const SortBy = sort.sortProperty
 
   const IsSearch = React.useRef(false);
   const IsMounted = React.useRef(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
- 
- 
 
   const category = categoryId > 0 ? `category=${categoryId}` : "";
 
@@ -43,8 +41,8 @@ function Home() {
       const sort = sortList.find(
         (obj) => obj.sortProperty === params.sortProperty
       );
-
-      dispatch(setFilters({ ...params, sort }));
+    //@ts-ignore     
+      dispatch(setFilters({ ...params, sort}));
       IsSearch.current = true;
     }
   }, []);
@@ -52,9 +50,9 @@ function Home() {
   const search = SearchValue ? `&search=${SearchValue}` : "";
 
   const fetchPizza = async () => {
-   //@ts-ignore
-    dispatch(fetchPizzas({sort, category, currentPage,search}));
-  }
+   
+    dispatch(fetchPizzas({ SortBy, category, currentPage:String(currentPage), search }));
+  };
 
   React.useEffect(() => {
     if (!IsSearch.current) {
@@ -78,15 +76,14 @@ function Home() {
     IsMounted.current = true;
   }, [categoryId, sort.sortProperty, currentPage]);
 
-  const onChangeCurrentPage = (num:number) => {
+  const onChangeCurrentPage = (num: number) => {
     dispatch(setCurrentPage(num));
   };
-  //@ts-ignore
-  const pizzas = pizzaItems.map((items, index:number) => (
-     <Pizzablock key={index}  {...items} />
-  
+
+  const pizzas = pizzaItems.map((items, index: number) => (
+    <Pizzablock key={index} {...items} />
   ));
-  const OnChangeCategoryId = (id:number) => {
+  const OnChangeCategoryId = (id: number) => {
     dispatch(setCategoryId(id));
   };
   const skeletons = [...new Array(8)].map((_, index) => (
@@ -96,14 +93,17 @@ function Home() {
     <>
       <div className="content__top">
         <Categories value={categoryId} onClickCategory={OnChangeCategoryId} />
-        <Sort />
+        <Sort name={""} sortProperty={"rating"} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
-      {status ==="error"?
-       <NotFoundBlock/>:
-        <div className="content__items">{status==="loading" ? skeletons : pizzas}</div>
-      }
-  
+      {status === "error" ? (
+        <NotFoundBlock />
+      ) : (
+        <div className="content__items">
+          {status === "loading" ? skeletons : pizzas}
+        </div>
+      )}
+
       <PaginationReact onChangeCurrentPage={onChangeCurrentPage} />
     </>
   );
