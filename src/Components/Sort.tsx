@@ -1,10 +1,14 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setActiveSort,selectSort } from "../redux/slice/filterSlice";
+import { setActiveSort } from "../redux/slice/filter/filterSlice";
+import {selectSort} from "../redux/slice/filter/selectors"
 type SortType = {
   name: string;
   sortProperty: "rating" | "title" | "price";
 
+}
+type SortPropsType ={
+  sort:SortType
 }
 export const sortList:SortType[]= [
   { name: "популярности", sortProperty: "rating" },
@@ -13,10 +17,10 @@ export const sortList:SortType[]= [
 ];
 
 
-const  Sort:React.FC<SortType>=() =>{
+const  Sort:React.FC<SortPropsType>=React.memo(({sort}) =>{
   const dispatch = useDispatch();
   const sortRef = React.useRef<HTMLDivElement>(null);
-  const activeSort = useSelector(selectSort)
+  
   const [open, setOpen] = React.useState(false);
 
 
@@ -27,13 +31,15 @@ const  Sort:React.FC<SortType>=() =>{
     
     setOpen(false);
   };
+
   React.useEffect(() => {
-    const handleClickOutSide = (event:any) => {
+    const handleClickOutSide= (event:any) => {
+    
       if (!event.path.includes(sortRef.current)) {
         setOpen(false);
       }
     };
-    document.body.addEventListener("click", handleClickOutSide);
+    document.body.addEventListener("click", handleClickOutSide) ;
 
     return () => {
       document.body.removeEventListener("click", handleClickOutSide);
@@ -57,7 +63,7 @@ const  Sort:React.FC<SortType>=() =>{
         </svg>
         <b>Сортировка по:</b>
 
-        <span onClick={() => setOpen(!open)}>{activeSort.name}</span>
+        <span onClick={() => setOpen(!open)}>{sort.name}</span>
       </div>
       {open && (
         <div className="sort__popup">
@@ -67,7 +73,7 @@ const  Sort:React.FC<SortType>=() =>{
                 onClick={() => onClickToSort(sortItem)}
                 key={index}
                 className={
-                  activeSort.sortProperty === sortItem.sortProperty ? "active" : ""
+                  sort.sortProperty === sortItem.sortProperty ? "active" : ""
                 }
               >
                 {sortItem.name}
@@ -78,6 +84,6 @@ const  Sort:React.FC<SortType>=() =>{
       )}
     </div>
   );
-}
+})
 
 export default Sort;

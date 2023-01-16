@@ -19,7 +19,9 @@ function App() {
         <Routes>
          <Route path="/" element = { <Home />} /> 
          <Route path="pizza/:id" element = { <FullPizza />} /> 
-         <Route path="/Cart" element = { <Cart/>} />
+         <Route path="/Cart" element = { 
+         <Cart/>
+         } />
          <Route path="*" element = { <NotFound/>} />
           </Routes>
         

@@ -4,14 +4,14 @@ import Sort, { sortList } from "../Components/Sort";
 import { Skeleton } from "../Components/PizzaBlock/Skeleton";
 import Pizzablock from "../Components/PizzaBlock/Pizzablock";
 import {
-  selectFilter,
   setCategoryId,
   setCurrentPage,
   setFilters,
-} from "../redux/slice/filterSlice";
+} from "../redux/slice/filter/filterSlice";
+import { selectFilter } from "../redux/slice/filter/selectors";
 
-import { useSelectorPizza } from "../redux/slice/pizzaSlice";
-import { fetchPizzas } from "../redux/slice/pizzaSlice";
+import { useSelectorPizza } from "../redux/slice/pizza/selectors";
+import { fetchPizzas } from "../redux/slice/pizza/pizzaSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 import PaginationReact from "../Components/Pagination/Pagination";
@@ -83,9 +83,9 @@ function Home() {
   const pizzas = pizzaItems.map((items, index: number) => (
     <Pizzablock key={index} {...items} />
   ));
-  const OnChangeCategoryId = (id: number) => {
+  const OnChangeCategoryId =React.useCallback((id: number) => {
     dispatch(setCategoryId(id));
-  };
+  },[]); 
   const skeletons = [...new Array(8)].map((_, index) => (
     <Skeleton key={index} />
   ));
@@ -93,7 +93,7 @@ function Home() {
     <>
       <div className="content__top">
         <Categories value={categoryId} onClickCategory={OnChangeCategoryId} />
-        <Sort name={""} sortProperty={"rating"} />
+        <Sort sort={sort} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       {status === "error" ? (

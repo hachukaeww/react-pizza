@@ -1,6 +1,7 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addPizza, CartItemType, minusItem, removePizza } from "../redux/slice/cartSlice";
+import { useDispatch } from "react-redux";
+import { addPizza, minusItem, removePizza } from "../redux/slice/cart/cartSlice";
+import { CartItemType } from "../redux/slice/cart/types";
 type CartItemProps = {
   id: string;
   name: string;
@@ -20,6 +21,8 @@ const CartItem: React.FC<CartItemProps> = ({
   type,
   count,
 }) => {
+  console.log(count);
+  
   const dispatch = useDispatch();
   const onClickPlus = () => {
     dispatch(
