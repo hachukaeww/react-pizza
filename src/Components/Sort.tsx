@@ -1,45 +1,39 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setActiveSort } from "../redux/slice/filter/filterSlice";
-import {selectSort} from "../redux/slice/filter/selectors"
+import { selectSort } from "../redux/slice/filter/selectors";
 type SortType = {
   name: string;
   sortProperty: "rating" | "title" | "price";
-
-}
-type SortPropsType ={
-  sort:SortType
-}
-export const sortList:SortType[]= [
+};
+type SortPropsType = {
+  sort: SortType;
+};
+export const sortList: SortType[] = [
   { name: "популярности", sortProperty: "rating" },
   { name: "цене", sortProperty: "price" },
   { name: "алфавиту", sortProperty: "title" },
 ];
 
-
-const  Sort:React.FC<SortPropsType>=React.memo(({sort}) =>{
+const Sort: React.FC<SortPropsType> = React.memo(({ sort }) => {
   const dispatch = useDispatch();
   const sortRef = React.useRef<HTMLDivElement>(null);
-  
+
   const [open, setOpen] = React.useState(false);
 
-
- 
-
-  const onClickToSort = (obj:SortType) => {
+  const onClickToSort = (obj: SortType) => {
     dispatch(setActiveSort(obj));
-    
+
     setOpen(false);
   };
 
   React.useEffect(() => {
-    const handleClickOutSide= (event:any) => {
-    
+    const handleClickOutSide = (event: any) => {
       if (!event.path.includes(sortRef.current)) {
         setOpen(false);
       }
     };
-    document.body.addEventListener("click", handleClickOutSide) ;
+    document.body.addEventListener("click", handleClickOutSide);
 
     return () => {
       document.body.removeEventListener("click", handleClickOutSide);
@@ -84,6 +78,6 @@ const  Sort:React.FC<SortPropsType>=React.memo(({sort}) =>{
       )}
     </div>
   );
-})
+});
 
 export default Sort;

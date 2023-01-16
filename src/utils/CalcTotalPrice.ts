@@ -7,3 +7,10 @@ export const CalcTotalPrice=(items:CartItemType[])=>{
 
    },0)
 }
+export const CalcTotalPriceMinus=(items:CartItemType[])=>{
+    return items.reduce((sum,item)=>{
+    return (item.price*item.count)-sum;
+  
+
+   },0)
+}

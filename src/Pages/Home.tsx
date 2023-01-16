@@ -1,31 +1,31 @@
 import React from "react";
-import Categories from "../Components/Categories";
-import Sort, { sortList } from "../Components/Sort";
-import { Skeleton } from "../Components/PizzaBlock/Skeleton";
-import Pizzablock from "../Components/PizzaBlock/Pizzablock";
+import { sortList } from "../Components/Sort";
 import {
   setCategoryId,
   setCurrentPage,
   setFilters,
 } from "../redux/slice/filter/filterSlice";
 import { selectFilter } from "../redux/slice/filter/selectors";
-
 import { useSelectorPizza } from "../redux/slice/pizza/selectors";
 import { fetchPizzas } from "../redux/slice/pizza/pizzaSlice";
 import { useSelector, useDispatch } from "react-redux";
-
-import PaginationReact from "../Components/Pagination/Pagination";
 import qs from "qs";
 import { useNavigate, Link } from "react-router-dom";
-import CartEmpty from "./CartEmpty";
-import NotFoundBlock from "../Components/NotFoundBLock";
 import { useAppDispatch } from "../redux/store";
+import {
+  Skeleton,
+  Categories,
+  PaginationReact,
+  Pizzablock,
+  Sort,
+  NotFoundBlock,
+} from "../Components";
 
 function Home() {
   const { sort, categoryId, currentPage, SearchValue } =
     useSelector(selectFilter);
   const { pizzaItems, status } = useSelector(useSelectorPizza);
-  const SortBy = sort.sortProperty
+  const SortBy = sort.sortProperty;
 
   const IsSearch = React.useRef(false);
   const IsMounted = React.useRef(false);
@@ -41,8 +41,8 @@ function Home() {
       const sort = sortList.find(
         (obj) => obj.sortProperty === params.sortProperty
       );
-    //@ts-ignore     
-      dispatch(setFilters({ ...params, sort}));
+      //@ts-ignore
+      dispatch(setFilters({ ...params, sort }));
       IsSearch.current = true;
     }
   }, []);
@@ -50,8 +50,14 @@ function Home() {
   const search = SearchValue ? `&search=${SearchValue}` : "";
 
   const fetchPizza = async () => {
-   
-    dispatch(fetchPizzas({ SortBy, category, currentPage:String(currentPage), search }));
+    dispatch(
+      fetchPizzas({
+        SortBy,
+        category,
+        currentPage: String(currentPage),
+        search,
+      })
+    );
   };
 
   React.useEffect(() => {
@@ -83,9 +89,9 @@ function Home() {
   const pizzas = pizzaItems.map((items, index: number) => (
     <Pizzablock key={index} {...items} />
   ));
-  const OnChangeCategoryId =React.useCallback((id: number) => {
+  const OnChangeCategoryId = React.useCallback((id: number) => {
     dispatch(setCategoryId(id));
-  },[]); 
+  }, []);
   const skeletons = [...new Array(8)].map((_, index) => (
     <Skeleton key={index} />
   ));

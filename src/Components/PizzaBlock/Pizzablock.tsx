@@ -13,7 +13,14 @@ type PizzaBlockProps = {
   types: number[];
   rating: number;
 };
-const Pizzablock:React.FC<PizzaBlockProps>=({ id, name, imageUrl, price, sizes, types })=> {
+const Pizzablock: React.FC<PizzaBlockProps> = ({
+  id,
+  name,
+  imageUrl,
+  price,
+  sizes,
+  types,
+}) => {
   const cartItem = useSelector(selectCartItemById(id));
 
   const typeNames = ["тонкое", "традиционное"];
@@ -22,32 +29,34 @@ const Pizzablock:React.FC<PizzaBlockProps>=({ id, name, imageUrl, price, sizes, 
 
   const [activeType, setActiveType] = React.useState(0);
 
-  const onClickToSize = (index:any) => {
+  const onClickToSize = (index: any) => {
     setActiveSize(index);
   };
-    //@ts-ignore
   const AddedCount = cartItem ? cartItem.count : 0;
 
-  const onClickToType = (index:any) => {
+  const onClickToType = (index: any) => {
     setActiveType(index);
   };
 
   const onClickAdd = () => {
-    const item:CartItemType = {
+    const item: CartItemType = {
       id,
       name,
       price,
       imageUrl,
       type: typeNames[activeType],
       size: sizes[activeSize],
-      count:0,
+      count: 0,
     };
     dispatch(addPizza(item));
   };
   return (
     <div className="pizza-block">
-    <Link to={`/pizza/${id}`}> <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
-      <h4 className="pizza-block__title">{name}</h4></Link> 
+      <Link to={`/pizza/${id}`}>
+        {" "}
+        <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
+        <h4 className="pizza-block__title">{name}</h4>
+      </Link>
       <div className="pizza-block__selector">
         <ul>
           {types.map((type, index) => (
@@ -97,6 +106,6 @@ const Pizzablock:React.FC<PizzaBlockProps>=({ id, name, imageUrl, price, sizes, 
       </div>
     </div>
   );
-}
+};
 
 export default Pizzablock;

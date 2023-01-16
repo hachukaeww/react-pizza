@@ -1,9 +1,9 @@
 import React from "react";
 
-type CategoriesPropsType={
-  value:Number;
-  onClickCategory:(index:number)=>void;
-}
+type CategoriesPropsType = {
+  value: Number;
+  onClickCategory: (index: number) => void;
+};
 let categories = [
   "Все",
   "Мясные",
@@ -13,24 +13,24 @@ let categories = [
   "Закрытые",
 ];
 
-const Categories:React.FC<CategoriesPropsType>=React.memo(({ value, onClickCategory })=> {
- 
-  return (
-   
-    <div className="categories">
-      <ul>
-        {categories.map((item, index) => (
-          <li
-            key={index}
-            onClick={() => onClickCategory(index)}
-            className={value === index ? "active" : ""}
-          >
-            {item}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-})
+const Categories: React.FC<CategoriesPropsType> = React.memo(
+  ({ value, onClickCategory }) => {
+    return (
+      <div className="categories">
+        <ul>
+          {categories.map((item, index) => (
+            <li
+              key={index}
+              onClick={() => onClickCategory(index)}
+              className={value === index ? "active" : ""}
+            >
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+);
 
 export default Categories;

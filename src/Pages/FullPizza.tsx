@@ -1,17 +1,17 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-function FullPizza(){
+function FullPizza() {
   const { id } = useParams();
 
   const [pizza, setPizza] = React.useState<{
-    imageUrl:string,
-    name:string,
-    price:number,
+    imageUrl: string;
+    name: string;
+    price: number;
   }>({
-    imageUrl:"",
-    name:"",
-    price:0,
+    imageUrl: "",
+    name: "",
+    price: 0,
   });
   React.useEffect(() => {
     async function fetchPizza() {
@@ -27,7 +27,7 @@ function FullPizza(){
     fetchPizza();
   }, []);
   if (!pizza) {
-    return <>Загрузка ....</>; 
+    return <>Загрузка ....</>;
   }
   return (
     <div className="pizza-block">

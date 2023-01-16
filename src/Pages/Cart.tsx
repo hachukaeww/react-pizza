@@ -7,23 +7,19 @@ import CartEmpty from "./CartEmpty";
 import { selectCart } from "../redux/slice/cart/selectors";
 
 function Cart() {
-  const {totalPrice,items}=useSelector(selectCart);
-  const totalCount= items.reduce((sum,item)=>sum+item.count,0);
-  const dispatch=useDispatch();
-  const onClickClearPizza=()=>{
-    if(window.confirm("Вы действительно хотите очистить корзину?"))
-    dispatch(clearItemsPizza());
-   }
- 
+  const { totalPrice, items } = useSelector(selectCart);
+  const totalCount = items.reduce((sum, item) => sum + item.count, 0);
+  const dispatch = useDispatch();
+  const onClickClearPizza = () => {
+    if (window.confirm("Вы действительно хотите очистить корзину?"))
+      dispatch(clearItemsPizza());
+  };
 
-if(!totalPrice){
-  return <CartEmpty/>
-}
+  if (!totalPrice) {
+    return <CartEmpty />;
+  }
   return (
-
-  
     <div className="content">
-    
       <div className="container container--cart">
         <div className="cart">
           <div className="cart__top">
@@ -59,7 +55,7 @@ if(!totalPrice){
               </svg>
               Корзина
             </h2>
-            <div  onClick={onClickClearPizza}className="cart__clear">
+            <div onClick={onClickClearPizza} className="cart__clear">
               <svg
                 width="20"
                 height="20"
@@ -102,7 +98,7 @@ if(!totalPrice){
           </div>
           <div className="content__items">
             {items.map((cartItem) => (
-              <CartItem key={cartItem.id} {...cartItem}  />
+              <CartItem key={cartItem.id} {...cartItem} />
             ))}
 
             <div className="cart__bottom">

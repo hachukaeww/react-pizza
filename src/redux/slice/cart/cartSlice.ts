@@ -36,6 +36,7 @@ const initialState:CartSliceState = {
           findItem.count--;
          
         }
+        state.totalPrice=CalcTotalPrice(state.items);
       
       },
       removePizza(state,action:PayloadAction<string>){
